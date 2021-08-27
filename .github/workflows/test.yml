@@ -6,7 +6,7 @@ jobs:
     name: Test Job
     runs-on: ubuntu-latest
     env:
-      GCP_PROJECT: {{ secrets.GCP_PROJECT_ID }}
+      GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
       RW_SA: terraform-rw@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
       RO_SA: terraform-ro@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
@@ -15,7 +15,7 @@ jobs:
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@master
       with:
-        project_id: {{ secrets.GCP_PROJECT_ID }}
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GOOGLE_CREDENTIALS_CICD }}
         export_default_credentials: true
 
