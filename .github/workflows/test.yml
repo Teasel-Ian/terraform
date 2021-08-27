@@ -25,7 +25,7 @@ jobs:
     - name: Create R/O key
       run: |
         RO_KEY=$(gcloud iam service-accounts keys create - --iam-account=${RO_SA} ; rm -f -)
-        echo RO_KEY::$RO_KEY >> $GITHUB_ENV
+        echo RO_KEY=$RO_KEY >> $GITHUB_ENV
     
     # - name: Authenticate as R/O account
     #   uses: google-github-actions/setup-gcloud@master
