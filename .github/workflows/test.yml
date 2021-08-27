@@ -31,7 +31,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@master
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
-        service_account_key: ${{ RO_KEY }}
+        service_account_key: ${{ env.RO_KEY }}
         export_default_credentials: true
 
     - name: gcloud config list
