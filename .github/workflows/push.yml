@@ -1,4 +1,4 @@
-name: test-action
+name: push-action
 on: push
 
 jobs:
