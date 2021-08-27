@@ -27,18 +27,18 @@ jobs:
         RO_KEY=$(gcloud iam service-accounts keys create - --iam-account=${RO_SA} ; rm -f -)
         echo "::set-env name=RO_KEY::$RO_KEY"
     
-    - name: Authenticate as R/O account
-      uses: google-github-actions/setup-gcloud@master
-      with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
-        service_account_key: ${{ env.RO_KEY }}
-        export_default_credentials: true
+    # - name: Authenticate as R/O account
+    #   uses: google-github-actions/setup-gcloud@master
+    #   with:
+    #     project_id: ${{ secrets.GCP_PROJECT_ID }}
+    #     service_account_key: ${{ env.RO_KEY }}
+    #     export_default_credentials: true
 
-    - name: gcloud config list
-      run: gcloud config list
+    # - name: gcloud config list
+    #   run: gcloud config list
 
     - name: Do some terraform
       run: echo "some terraform"
 
     - name: Delete key
-      run: echo $RO_KEY | jq '.private_key_id'
+      run: echo $RO_KEY ; echo $RO_KEY | jq '.private_key_id'
