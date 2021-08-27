@@ -27,7 +27,8 @@ jobs:
       run: echo "terraform plan"
 
   apply_job:
-    name: Plan Job
+    name: Apply Job
+    needs: plan_job
     runs-on: ubuntu-latest
     environment: feature
     env:
