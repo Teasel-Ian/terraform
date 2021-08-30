@@ -32,7 +32,7 @@ jobs:
 
     - name: Terraform Format
       id: fmt
-      run: terraform fmt -check
+      run: terraform fmt -list=true -write=false -diff=true -check=true -chdir=terraform
       continue-on-error: true
 
     - name: Terraform Init
