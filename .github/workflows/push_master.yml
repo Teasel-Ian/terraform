@@ -4,14 +4,15 @@ on:
     branches:
     - master
 
+env:
+  GCP_PROJECT_ID: ian-harris-test01
+
 jobs:
 
   plan_job:
     name: Terraform plan
     runs-on: ubuntu-latest
     environment: master
-    env:
-      PROJECT: ${{ secrets.GCP_PROJECT_ID }}
 
     steps:
 
@@ -21,7 +22,7 @@ jobs:
     - name: Set up Cloud SDK - R/W account
       uses: google-github-actions/setup-gcloud@master
       with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        project_id: ${{ env.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.RW_KEY }}
         export_default_credentials: true
 
@@ -60,8 +61,6 @@ jobs:
     needs: plan_job
 
     environment: deploy
-    env:
-      PROJECT: ${{ secrets.GCP_PROJECT_ID }}
 
     steps:
 
@@ -71,7 +70,7 @@ jobs:
     - name: Set up Cloud SDK - R/W account
       uses: google-github-actions/setup-gcloud@master
       with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        project_id: ${{ env.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.DEPLOY_KEY }}
         export_default_credentials: true
 

@@ -2,13 +2,14 @@ name: pull-request-action
 on:
   pull_request:
 
+env:
+  GCP_PROJECT_ID: ian-harris-test01
+
 jobs:
   plan_job:
     name: Terraform plan
     runs-on: ubuntu-latest
     environment: feature
-    env:
-      PROJECT: ${{ secrets.GCP_PROJECT_ID }}
 
     steps:
 
@@ -18,7 +19,7 @@ jobs:
     - name: Set up Cloud SDK - R/O account
       uses: google-github-actions/setup-gcloud@master
       with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        project_id: ${{ env.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.RO_KEY }}
         export_default_credentials: true
 
