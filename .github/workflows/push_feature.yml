@@ -25,13 +25,3 @@ jobs:
     - name: Terraform Format
       id: fmt
       run: terraform fmt -list=true -write=false -diff=true -check=true
-
-
-    - uses: LouisBrunner/checks-action@v1.1.1
-      if: always()
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test XYZ
-        conclusion: ${{ job.status }}
-        output: |
-          {"summary":${{ steps.fmt.outputs.summary }}}
