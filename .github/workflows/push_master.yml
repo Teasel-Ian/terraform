@@ -19,7 +19,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Set up Cloud SDK - R/W account
+    - name: Set up Cloud SDK - PLAN account
       uses: google-github-actions/setup-gcloud@master
       with:
         project_id: ${{ env.GCP_PROJECT_ID }}
@@ -67,7 +67,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Set up Cloud SDK - R/W account
+    - name: Set up Cloud SDK - DEPLOY account
       uses: google-github-actions/setup-gcloud@master
       with:
         project_id: ${{ env.GCP_PROJECT_ID }}
@@ -86,7 +86,7 @@ jobs:
 
     - name: Terraform Init
       id: init
-      run: terraform init
+      run: terraform init -backend-config="bucket=${{ env.GCP_STATE_BUCKET }}" -backend-config="prefix=${{ env.GCP_STATE_PREFIX }}" terraform/
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'

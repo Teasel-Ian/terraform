@@ -22,4 +22,4 @@ jobs:
         
     - name: Terraform Format
       id: fmt
-      run: terraform fmt -list=true -write=false -diff=true -check=true
+      run: terraform fmt -list=true -write=false -diff=true -check=true terraform/

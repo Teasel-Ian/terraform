@@ -4,6 +4,8 @@ on:
 
 env:
   GCP_PROJECT_ID: ian-harris-test01
+  GCP_STATE_BUCKET: ian-harris-test01-terraform-state
+  GCP_STATE_PREFIX: default
 
 jobs:
   plan_job:
@@ -35,16 +37,16 @@ jobs:
 
     - name: Terraform Init
       id: init
-      run: terraform init
+      run: terraform init -backend-config="bucket=${{ env.GCP_STATE_BUCKET }}" -backend-config="prefix=${{ env.GCP_STATE_PREFIX }}" terraform/
 
     - name: Terraform Validate
       id: validate
-      run: terraform validate -no-color
+      run: terraform validate -no-color terraform/
 
     - name: Terraform Plan
       id: plan
       if: github.event_name == 'pull_request'
-      run: terraform plan -no-color
+      run: terraform plan -no-color terraform/
       continue-on-error: true
 
     - name: Update Pull Request

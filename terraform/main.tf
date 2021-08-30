@@ -1,5 +1,5 @@
 resource "google_storage_bucket" "auto-expire" {
-  name          = "tuk-testing-auto-expiring-bucket-04"
+  name          = "tuk-testing-auto-expiring-bucket-05"
   location      = "EU"
   force_destroy = true
 
@@ -8,7 +8,7 @@ resource "google_storage_bucket" "auto-expire" {
       age = 3
     }
     action {
-      type = "Delete"
+       type = "Delete"
     }
   }
 }
