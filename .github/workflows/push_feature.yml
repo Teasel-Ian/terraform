@@ -1,4 +1,4 @@
-name: push-action
+name: push
 on: 
   push:
     branches-ignore:
