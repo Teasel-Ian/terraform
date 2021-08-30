@@ -5,6 +5,55 @@ on:
     - master
 
 jobs:
+
+  plan_job:
+    name: Terraform plan
+    runs-on: ubuntu-latest
+    environment: master
+    env:
+      PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set up Cloud SDK - R/W account
+      uses: google-github-actions/setup-gcloud@master
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.RW_KEY }}
+        export_default_credentials: true
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.5
+
+    - name: Terraform Format
+      id: fmt
+      run: terraform fmt -check
+      continue-on-error: true
+
+    - name: Terraform Init
+      id: init
+      run: terraform init
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+
+    - name: Terraform Plan
+      id: plan
+      if: github.event_name == 'pull_request'
+      run: terraform plan -no-color -out "planfile"
+
+    - name: Upload planfile
+      uses: actions/upload-artifact@v2
+      with:
+        name: planfile
+        path: planfile
+
   apply_job:
     name: Terraform apply
     runs-on: ubuntu-latest
@@ -30,10 +79,15 @@ jobs:
       with:
         terraform_version: 1.0.5
 
+    - name: Download planfile
+      uses: actions/download-artifact@v2
+      with:
+        name: planfile
+
     - name: Terraform Init
       id: init
       run: terraform init
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve -input=false planfile
