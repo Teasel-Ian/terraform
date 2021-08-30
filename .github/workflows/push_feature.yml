@@ -1,0 +1,37 @@
+name: push-action
+on: 
+  push:
+    branches-ignore:
+    - master
+
+jobs:
+  fmt_job:
+    name: Terraform fmt
+    runs-on: ubuntu-latest
+    environment: feature
+    env:
+      PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.5
+        
+    - name: Terraform Format
+      id: fmt
+      run: terraform fmt -list=true -write=false -diff=true -check=true
+
+
+    - uses: LouisBrunner/checks-action@v1.1.1
+      if: always()
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test XYZ
+        conclusion: ${{ job.status }}
+        output: |
+          {"summary":${{ steps.fmt.outputs.summary }}}
