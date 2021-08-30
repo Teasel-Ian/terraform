@@ -35,20 +35,20 @@ jobs:
 
     - name: Terraform Format
       id: fmt
-      run: terraform fmt -list=true -write=false -diff=true -check=true -chdir=terraform
+      run: terraform -chdir=terraform fmt -list=true -write=false -diff=true -check=true
       continue-on-error: true
 
     - name: Terraform Init
       id: init
-      run: terraform init -backend-config="bucket=${{ env.GCP_STATE_BUCKET }}" -backend-config="prefix=${{ env.GCP_STATE_PREFIX }}" -chdir=terraform
+      run: terraform -chdir=terraform init -backend-config="bucket=${{ env.GCP_STATE_BUCKET }}" -backend-config="prefix=${{ env.GCP_STATE_PREFIX }}"
 
     - name: Terraform Validate
       id: validate
-      run: terraform validate -no-color -chdir=terraform
+      run: terraform -chdir=terraform validate -no-color
 
     - name: Terraform Plan
       id: plan
-      run: terraform plan -no-color -out "planfile"
+      run: terraform -chdir=terraform plan -no-color -out "planfile"
 
     - name: Upload planfile
       uses: actions/upload-artifact@v2
@@ -88,8 +88,8 @@ jobs:
 
     - name: Terraform Init
       id: init
-      run: terraform init -backend-config="bucket=${{ env.GCP_STATE_BUCKET }}" -backend-config="prefix=${{ env.GCP_STATE_PREFIX }}" -chdir=terraform
+      run: terraform -chdir=terraform init -backend-config="bucket=${{ env.GCP_STATE_BUCKET }}" -backend-config="prefix=${{ env.GCP_STATE_PREFIX }}"
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-      run: terraform apply -auto-approve -input=false planfile
+      run: terraform -chdir=terraform apply -auto-approve -input=false planfile
