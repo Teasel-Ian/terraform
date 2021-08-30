@@ -90,7 +90,7 @@ jobs:
     name: Apply Job
     needs: plan_job
     runs-on: ubuntu-latest
-    environment: feature
+    environment: master
     env:
       PROJECT: ${{ secrets.GCP_PROJECT_ID }}
 
@@ -102,7 +102,11 @@ jobs:
         service_account_key: ${{ secrets.RW_KEY }}
         export_default_credentials: true
 
+    - name: Show logged in user
+      run: gcloud config list
+
+
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-     run: terraform apply -auto-approve
+      run: terraform apply -auto-approve
