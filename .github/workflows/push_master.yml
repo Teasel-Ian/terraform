@@ -7,7 +7,6 @@ on:
 jobs:
   apply_job:
     name: Terraform apply
-    needs: plan_job
     runs-on: ubuntu-latest
 
     environment: master
