@@ -1,5 +1,10 @@
 name: push-action
-on: push
+on: 
+  push:
+    branches-ignore:
+    - master
+  pull_request:
+
 
 jobs:
   plan_job:
@@ -79,6 +84,7 @@ jobs:
     name: Apply Job
     needs: plan_job
     runs-on: ubuntu-latest
+
     environment: master
     env:
       PROJECT: ${{ secrets.GCP_PROJECT_ID }}
