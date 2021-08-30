@@ -1,4 +1,4 @@
-name: pull-request
+name: plan
 on:
   pull_request:
 
@@ -45,13 +45,11 @@ jobs:
 
     - name: Terraform Plan
       id: plan
-      if: github.event_name == 'pull_request'
-      run: terraform -chdir=terraform plan -no-color
-      continue-on-error: true
+      run: terraform -chdir=terraform plan -no-color -lock=false
 
     - name: Update Pull Request
       uses: actions/github-script@0.9.0
-      if: github.event_name == 'pull_request'
+      if: always() && github.event_name == 'pull_request'
       env:
         PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
       with:
