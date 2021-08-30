@@ -84,6 +84,10 @@ jobs:
       PROJECT: ${{ secrets.GCP_PROJECT_ID }}
 
     steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
     - name: Set up Cloud SDK - R/W account
       uses: google-github-actions/setup-gcloud@master
       with:
@@ -99,7 +103,7 @@ jobs:
     - name: Terraform Init
       id: init
       run: terraform init
-      
+
     - name: Terraform Apply
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
       run: terraform apply -auto-approve
