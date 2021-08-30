@@ -1,4 +1,4 @@
-resofurce "google_storage_bucket" "auto-expire" {
+resource "google_storage_bucket" "auto-expire" {
   name          = "tuk-testing-auto-expiring-bucket-01"
   location      = "EU"
   force_destroy = true
