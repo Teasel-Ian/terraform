@@ -9,8 +9,6 @@ jobs:
     name: Terraform fmt
     runs-on: ubuntu-latest
     environment: feature
-    env:
-      PROJECT: ${{ secrets.GCP_PROJECT_ID }}
 
     steps:
 
