@@ -1,7 +1,8 @@
 name: push-action
-on: push
-  branches:
-  - master
+on: 
+  push:
+    branches:
+    - master
 
 jobs:
   apply_job:
