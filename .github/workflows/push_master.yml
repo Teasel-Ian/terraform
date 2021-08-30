@@ -54,7 +54,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: planfile
-        path: planfile
+        path: terraform/planfile
         if-no-files-found: error
 
   apply_job:
