@@ -88,7 +88,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: planfile
-        path: terraform/planfile
+        path: terraform
 
 
     - name: ls
