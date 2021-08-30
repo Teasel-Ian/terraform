@@ -1,4 +1,4 @@
-name: push-action
+name: push-to-master-action
 on: 
   push:
     branches:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   apply_job:
-    name: Apply Job
+    name: Terraform apply (push to master)
     needs: plan_job
     runs-on: ubuntu-latest
 
