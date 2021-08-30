@@ -1,4 +1,4 @@
-name: push-to-master-action
+name: push-to-master
 on: 
   push:
     branches:
