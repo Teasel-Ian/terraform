@@ -8,7 +8,7 @@ resource "google_storage_bucket" "auto-expire" {
       age = 3
     }
     action {
-      type = "Delete"
+       type = "Delete"
     }
   }
 }
