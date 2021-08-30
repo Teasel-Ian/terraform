@@ -1,0 +1,78 @@
+name: plan
+on:
+  pull_request:
+
+env:
+  GCP_PROJECT_ID: ian-harris-test01
+  GCP_STATE_BUCKET: ian-harris-test01-terraform-state
+  GCP_STATE_PREFIX: default
+
+jobs:
+  plan:
+    name: Terraform plan
+    runs-on: ubuntu-latest
+    environment: feature
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set up Cloud SDK - R/O account
+      uses: google-github-actions/setup-gcloud@master
+      with:
+        project_id: ${{ env.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.RO_KEY }}
+        export_default_credentials: true
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.5
+
+    - name: Terraform Format
+      id: fmt
+      run: terraform -chdir=terraform fmt -list=true -write=false -diff=true -check=true
+      continue-on-error: true
+
+    - name: Terraform Init
+      id: init
+      run: terraform -chdir=terraform init -backend-config="bucket=${{ env.GCP_STATE_BUCKET }}" -backend-config="prefix=${{ env.GCP_STATE_PREFIX }}"
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform -chdir=terraform validate -no-color
+
+    - name: Terraform Plan
+      id: plan
+      run: terraform -chdir=terraform plan -no-color -lock=false
+
+    - name: Update Pull Request
+      uses: actions/github-script@0.9.0
+      if: always() && github.event_name == 'pull_request'
+      env:
+        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+          #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+
+          <details><summary>Show Plan</summary>
+
+          \`\`\`\n
+          ${process.env.PLAN}
+          \`\`\`
+
+          </details>
+
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })

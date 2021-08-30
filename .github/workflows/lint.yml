@@ -1,0 +1,25 @@
+name: lint
+on: 
+  push:
+    branches-ignore:
+    - master
+
+jobs:
+  fmt_job:
+    name: Terraform fmt
+    runs-on: ubuntu-latest
+    environment: feature
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.5
+        
+    - name: Terraform Format
+      id: fmt
+      run: terraform -chdir=terraform fmt -list=true -write=false -diff=true -check=true
