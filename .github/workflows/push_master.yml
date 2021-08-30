@@ -57,6 +57,9 @@ jobs:
         path: terraform/planfile
         if-no-files-found: error
 
+    - name: ls
+      run: ls -lR
+
   apply_job:
     name: Terraform apply
     runs-on: ubuntu-latest
@@ -85,6 +88,9 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: planfile
+
+    - name: ls
+      run: ls -lR
 
     - name: Terraform Init
       id: init
