@@ -14,17 +14,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-
-    - name: Set up Cloud SDK
+    - name: Set up Cloud SDK - R/O account
       uses: google-github-actions/setup-gcloud@master
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.RO_KEY }}
         export_default_credentials: true
-
-    - name: Show logged in user
-      run: gcloud config list
-
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
@@ -42,9 +37,6 @@ jobs:
     - name: Terraform Validate
       id: validate
       run: terraform validate -no-color
-
-    - name: Terraform init
-      run: echo "terraform plan"
 
     - name: Terraform Plan
       id: plan
@@ -92,17 +84,17 @@ jobs:
       PROJECT: ${{ secrets.GCP_PROJECT_ID }}
 
     steps:
-    - name: Set up Cloud SDK
+    - name: Set up Cloud SDK - R/W account
       uses: google-github-actions/setup-gcloud@master
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.RW_KEY }}
         export_default_credentials: true
 
-    - name: Show logged in user
-      run: gcloud config list
-
-
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.5
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'

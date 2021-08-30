@@ -1,6 +1,9 @@
 name: test-action
-on: test
-
+on:
+  push:
+    branches:
+      - test
+      
 jobs:
   test_job:
     name: Test Job
