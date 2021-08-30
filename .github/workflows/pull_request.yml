@@ -4,7 +4,7 @@ on:
 
 jobs:
   plan_job:
-    name: Terraform plan (pull_request)
+    name: Terraform plan
     runs-on: ubuntu-latest
     environment: feature
     env:

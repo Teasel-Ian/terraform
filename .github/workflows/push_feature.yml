@@ -5,8 +5,8 @@ on:
     - master
 
 jobs:
-  plan_job:
-    name: Terraform fmt (lint check)
+  fmt_job:
+    name: Terraform fmt
     runs-on: ubuntu-latest
     environment: feature
     env:
@@ -24,4 +24,4 @@ jobs:
         
     - name: Terraform Format
       id: fmt
-      run: terraform fmt -check
+      run: terraform fmt -list=true -write=false -diff=true -check=true
