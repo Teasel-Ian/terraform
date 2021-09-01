@@ -4,11 +4,11 @@ resource "google_storage_bucket" "auto-expire" {
   force_destroy = true
 
   lifecycle_rule {
-    condition {
+    condition  {
       age = 3
     }
     action {
-       type = "Delete"
+      type   = "Delete"
     }
   }
 }
